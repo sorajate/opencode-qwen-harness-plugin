@@ -117,6 +117,17 @@ $env:ALIBABA_TOKEN_PLAN_API_KEY = "your-api-key"
       "models": {
         "qwen3.8-max-preview": {
           "name": "Qwen 3.8 Max Preview",
+          "reasoning": true,
+          "attachment": true,
+          "tool_call": true,
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": ["text", "image", "video", "pdf"],
+            "output": ["text"]
+          },
           "provider": {
             "npm": "@ai-sdk/openai"
           }
@@ -127,7 +138,7 @@ $env:ALIBABA_TOKEN_PLAN_API_KEY = "your-api-key"
 }
 ```
 
-ส่วน model-level override ที่ใช้ `@ai-sdk/openai` มีความสำคัญ เพราะทำให้โมเดลนี้เรียก `/responses` ขณะที่โมเดลอื่นภายใต้ provider เดียวกันยังใช้ OpenAI-compatible provider ได้
+ควรใช้ model block แบบเต็มตามตัวอย่าง เพราะ custom provider model อาจไม่แสดงอย่างถูกต้องเมื่อไม่มีข้อมูล capabilities, limit และ modalities ส่วน model-level override ที่ใช้ `@ai-sdk/openai` ก็มีความสำคัญ เพราะทำให้โมเดลนี้เรียก `/responses` ขณะที่โมเดลอื่นภายใต้ provider เดียวกันยังใช้ OpenAI-compatible provider ได้
 
 #### 3. ลงทะเบียน Plugin
 

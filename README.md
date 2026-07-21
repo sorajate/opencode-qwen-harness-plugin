@@ -117,6 +117,17 @@ Add the provider to `~/.config/opencode/opencode.json`. Replace the example endp
       "models": {
         "qwen3.8-max-preview": {
           "name": "Qwen 3.8 Max Preview",
+          "reasoning": true,
+          "attachment": true,
+          "tool_call": true,
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": ["text", "image", "video", "pdf"],
+            "output": ["text"]
+          },
           "provider": {
             "npm": "@ai-sdk/openai"
           }
@@ -127,7 +138,7 @@ Add the provider to `~/.config/opencode/opencode.json`. Replace the example endp
 }
 ```
 
-The model-level `@ai-sdk/openai` override is important. It makes this model use `/responses` while allowing other models under the same provider to continue using the OpenAI-compatible provider.
+Use the complete model block above. Custom provider models may not appear correctly when capability, limit, and modality metadata is omitted. The model-level `@ai-sdk/openai` override is also important: it makes this model use `/responses` while allowing other models under the same provider to continue using the OpenAI-compatible provider.
 
 #### 3. Register the Plugin
 

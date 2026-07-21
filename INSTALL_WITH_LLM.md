@@ -146,6 +146,17 @@ The following is a config fragment, not a complete replacement config:
       "models": {
         "qwen3.8-max-preview": {
           "name": "Qwen 3.8 Max Preview",
+          "reasoning": true,
+          "attachment": true,
+          "tool_call": true,
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": ["text", "image", "video", "pdf"],
+            "output": ["text"]
+          },
           "provider": {
             "npm": "@ai-sdk/openai"
           }
@@ -162,9 +173,10 @@ Merge rules:
 2. If `alibaba-token-plan` does not exist, add the provider fragment.
 3. If it exists, preserve its unrelated options and models.
 4. Confirm before changing an existing `baseURL` or literal API key configuration.
-5. Add or merge `qwen3.8-max-preview` under `models`.
-6. Ensure this model has the model-level `provider.npm` value `@ai-sdk/openai` so it uses `/responses`.
-7. Preserve existing model capability, limit, modality, and variant settings.
+5. Add or merge the complete `qwen3.8-max-preview` block under `models`. Do not use a name-only model entry.
+6. If capability, limit, or modality fields are missing, add the values shown in the example so OpenCode can list and use the custom model correctly.
+7. Ensure this model has the model-level `provider.npm` value `@ai-sdk/openai` so it uses `/responses`.
+8. Preserve existing user-defined model capability, limit, modality, and variant values. Fill missing fields; do not overwrite intentional custom values without approval.
 
 OpenCode config files may contain JSONC features. Use an editing method that preserves the file's existing format and comments.
 
