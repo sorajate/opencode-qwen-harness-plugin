@@ -45,7 +45,7 @@ Model and tool availability may change on the Alibaba service. Use `modelTools` 
 
 - OpenCode with local TypeScript plugin support
 - An Alibaba Token Plan account and API key
-- A model configured to use `@ai-sdk/openai` so requests use the Responses API
+- An Alibaba provider configured with `@ai-sdk/openai` so requests use the Responses API
 - A valid Alibaba Token Plan `baseURL` for your region
 
 Tested with OpenCode `1.18.3` and Bun `1.3.9`.
@@ -108,7 +108,7 @@ Add the provider to `~/.config/opencode/opencode.json`. Replace the example endp
 {
   "provider": {
     "alibaba-token-plan": {
-      "npm": "@ai-sdk/openai-compatible",
+      "npm": "@ai-sdk/openai",
       "name": "Alibaba Token Plan",
       "options": {
         "baseURL": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
@@ -127,9 +127,6 @@ Add the provider to `~/.config/opencode/opencode.json`. Replace the example endp
           "modalities": {
             "input": ["text", "image", "video", "pdf"],
             "output": ["text"]
-          },
-          "provider": {
-            "npm": "@ai-sdk/openai"
           }
         }
       }
@@ -138,7 +135,9 @@ Add the provider to `~/.config/opencode/opencode.json`. Replace the example endp
 }
 ```
 
-Use the complete model block above. Custom provider models may not appear correctly when capability, limit, and modality metadata is omitted. The model-level `@ai-sdk/openai` override is also important: it makes this model use `/responses` while allowing other models under the same provider to continue using the OpenAI-compatible provider.
+Use the complete model block above. Custom provider models may not appear correctly when capability, limit, and modality metadata is omitted. Provider-level `@ai-sdk/openai` makes the configured models use `/responses` and is the simplest setup when this provider contains only Qwen Responses API models.
+
+For a mixed provider that also contains GLM, DeepSeek, or other models requiring Chat Completions, keep provider-level `@ai-sdk/openai-compatible` and add `"provider": { "npm": "@ai-sdk/openai" }` inside only the Qwen model block.
 
 #### 3. Register the Plugin
 
@@ -235,7 +234,7 @@ The provider still executes the Harness tool, and Qwen still receives its result
 ### Harness Tools Are Not Used
 
 - Confirm the selected model exists in the built-in map or `modelTools`.
-- Confirm the model uses `@ai-sdk/openai`, not only `@ai-sdk/openai-compatible`.
+- Confirm the provider uses `@ai-sdk/openai`. For a mixed provider, confirm the Qwen model has a model-level `@ai-sdk/openai` override.
 - Confirm `baseURL` points to the correct Token Plan endpoint.
 - Confirm the required tool is not listed in `disabledTools`.
 - Enable `debug` and restart OpenCode to verify endpoint registration.

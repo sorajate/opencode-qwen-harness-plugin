@@ -137,7 +137,7 @@ The following is a config fragment, not a complete replacement config:
 {
   "provider": {
     "alibaba-token-plan": {
-      "npm": "@ai-sdk/openai-compatible",
+      "npm": "@ai-sdk/openai",
       "name": "Alibaba Token Plan",
       "options": {
         "baseURL": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
@@ -156,9 +156,6 @@ The following is a config fragment, not a complete replacement config:
           "modalities": {
             "input": ["text", "image", "video", "pdf"],
             "output": ["text"]
-          },
-          "provider": {
-            "npm": "@ai-sdk/openai"
           }
         }
       }
@@ -171,12 +168,13 @@ Merge rules:
 
 1. If `provider` does not exist, create it without changing other top-level keys.
 2. If `alibaba-token-plan` does not exist, add the provider fragment.
-3. If it exists, preserve its unrelated options and models.
-4. Confirm before changing an existing `baseURL` or literal API key configuration.
-5. Add or merge the complete `qwen3.8-max-preview` block under `models`. Do not use a name-only model entry.
-6. If capability, limit, or modality fields are missing, add the values shown in the example so OpenCode can list and use the custom model correctly.
-7. Ensure this model has the model-level `provider.npm` value `@ai-sdk/openai` so it uses `/responses`.
-8. Preserve existing user-defined model capability, limit, modality, and variant values. Fill missing fields; do not overwrite intentional custom values without approval.
+3. For a new provider containing only Qwen Responses API models, use provider-level `npm: "@ai-sdk/openai"` as shown.
+4. If the provider exists, preserve its unrelated options and models.
+5. Confirm before changing an existing `baseURL`, adapter, or literal API key configuration.
+6. Add or merge the complete `qwen3.8-max-preview` block under `models`. Do not use a name-only model entry.
+7. If capability, limit, or modality fields are missing, add the values shown in the example so OpenCode can list and use the custom model correctly.
+8. If the existing provider also contains GLM, DeepSeek, or another model that requires Chat Completions, keep provider-level `@ai-sdk/openai-compatible` and add `"provider": { "npm": "@ai-sdk/openai" }` inside the Qwen model block only.
+9. Preserve existing user-defined model capability, limit, modality, and variant values. Fill missing fields; do not overwrite intentional custom values without approval.
 
 OpenCode config files may contain JSONC features. Use an editing method that preserves the file's existing format and comments.
 
@@ -258,7 +256,7 @@ Use this final checklist before reporting success:
 - [ ] `qwen-harness.ts` is in a stable directory.
 - [ ] The plugin path in the config is absolute and exists.
 - [ ] `alibaba-token-plan` exists exactly once.
-- [ ] `qwen3.8-max-preview` uses model-level `@ai-sdk/openai`.
+- [ ] The provider uses `@ai-sdk/openai`, or the Qwen model uses a model-level `@ai-sdk/openai` override in a mixed provider.
 - [ ] The API key is referenced through `{env:ALIBABA_TOKEN_PLAN_API_KEY}`.
 - [ ] No API key value was printed or written to a tracked file.
 - [ ] Existing providers, plugins, MCP servers, and settings remain present.
