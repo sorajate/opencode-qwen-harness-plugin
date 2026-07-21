@@ -52,7 +52,29 @@ Tested with OpenCode `1.18.3` and Bun `1.3.9`.
 
 ## Installation
 
-### 1. Clone the Repository
+### Install with an AI Agent
+
+This is the easiest installation method. Use an AI coding agent that can read files, edit files, and run terminal commands on the machine where OpenCode is installed.
+
+1. Open your AI coding agent in any stable working directory.
+2. Paste the prompt below without adding your API key.
+3. The agent will inspect the existing OpenCode config, clone or locate the plugin, merge only the required settings, and run non-billable validation.
+4. Set the API key environment variable yourself when the agent asks.
+5. Approve the optional live test only if you accept Alibaba Token Plan Credit usage.
+
+Ready-to-use prompt:
+
+```text
+Install the Qwen Harness Tools plugin for OpenCode on this machine. Perform the installation instead of only explaining it. First read https://raw.githubusercontent.com/sorajate/opencode-qwen-harness-plugin/main/INSTALL_WITH_LLM.md and follow every section in order. Use your file and terminal tools to inspect my existing setup. Preserve every unrelated config entry. Never print or write a literal API key. Use the environment variable described in the guide. Run all non-billable validation steps. Stop and ask me if you find a conflict or need to run a billable live model test. At the end, report the files changed, commands run, validation results, and any remaining manual action.
+```
+
+The linked [LLM installation guide](INSTALL_WITH_LLM.md) is intentionally detailed and uses a fixed execution order, short rules, stop conditions, config merge instructions, a completion checklist, and rollback steps. Smaller models should follow the guide literally and must not skip steps or guess through conflicts.
+
+Do not paste an Alibaba API key into the prompt. The agent should only check whether `ALIBABA_TOKEN_PLAN_API_KEY` exists and ask you to set it without revealing its value.
+
+### Manual Installation
+
+#### 1. Clone the Repository
 
 Clone this repository to a stable location. OpenCode loads the TypeScript file directly, so no `npm install` or build command is required.
 
@@ -66,7 +88,7 @@ On Windows, you can clone it to a location such as:
 git clone https://github.com/sorajate/opencode-qwen-harness-plugin.git "$HOME\.config\opencode\plugins\qwen-harness"
 ```
 
-### 2. Configure the Provider
+#### 2. Configure the Provider
 
 Set your API key through an environment variable instead of committing it to the configuration file:
 
@@ -107,7 +129,7 @@ Add the provider to `~/.config/opencode/opencode.json`. Replace the example endp
 
 The model-level `@ai-sdk/openai` override is important. It makes this model use `/responses` while allowing other models under the same provider to continue using the OpenAI-compatible provider.
 
-### 3. Register the Plugin
+#### 3. Register the Plugin
 
 Add the plugin tuple to the `plugin` array in `opencode.json`. Use the absolute path to your cloned `qwen-harness.ts` file.
 
