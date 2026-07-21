@@ -191,8 +191,8 @@ To enable every tool in the model map:
 
 ```json
 "modelTools": {
-  "qwen4.0-max": ["web_search", "web_extractor"],
-  "qwen3.8-max-preview": ["web_search"]
+  "qwen3.8-max-preview": ["web_search", "web_extractor"],
+  "qwen3.7-max": ["web_search"]
 }
 ```
 
